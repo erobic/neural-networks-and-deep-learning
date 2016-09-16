@@ -154,6 +154,7 @@ class Network(object):
         """
         if evaluation_data: n_data = len(evaluation_data)
         n = len(training_data)
+        output_classes = len(training_data[0][1])
         evaluation_cost, evaluation_accuracy = [], []
         training_cost, training_accuracy = [], []
         for j in xrange(epochs):
@@ -166,7 +167,7 @@ class Network(object):
                     mini_batch, eta, lmbda, len(training_data))
             print "Epoch %s training complete" % j
             if monitor_training_cost:
-                cost = self.total_cost(training_data, lmbda)
+                cost = self.total_cost(training_data, lmbda, convert=False, output_classes=output_classes)
                 training_cost.append(cost)
                 print "Cost on training data: {}".format(cost)
             if monitor_training_accuracy:
@@ -175,7 +176,7 @@ class Network(object):
                 print "Accuracy on training data: {} / {}".format(
                     accuracy, n)
             if monitor_evaluation_cost:
-                cost = self.total_cost(evaluation_data, lmbda, convert=True)
+                cost = self.total_cost(evaluation_data, lmbda, convert=True, output_classes=output_classes)
                 evaluation_cost.append(cost)
                 print "Cost on evaluation data: {}".format(cost)
             if monitor_evaluation_accuracy:
@@ -271,7 +272,7 @@ class Network(object):
                         for (x, y) in data]
         return sum(int(x == y) for (x, y) in results)
 
-    def total_cost(self, data, lmbda, convert=False):
+    def total_cost(self, data, lmbda, convert=False, output_classes=None):
         """Return the total cost for the data set ``data``.  The flag
         ``convert`` should be set to False if the data set is the
         training data (the usual case), and to True if the data set is
@@ -281,7 +282,7 @@ class Network(object):
         cost = 0.0
         for x, y in data:
             a = self.feedforward(x)
-            if convert: y = vectorized_result(y)
+            if convert: y = vectorized_result(y, output_classes)
             cost += self.cost.fn(a, y)/len(data)
         cost += 0.5*(lmbda/len(data))*sum(
             np.linalg.norm(w)**2 for w in self.weights)
@@ -313,13 +314,12 @@ def load(filename):
     return net
 
 #### Miscellaneous functions
-def vectorized_result(j):
-    """Return a 10-dimensional unit vector with a 1.0 in the j'th position
-    and zeroes elsewhere.  This is used to convert a digit (0...9)
-    into a corresponding desired output from the neural network.
+def vectorized_result(j, dimension):
+    """Return a n-dimensional unit vector with a 1.0 in the j'th position
+    and zeroes elsewhere
 
     """
-    e = np.zeros((10, 1))
+    e = np.zeros((dimension, 1))
     e[j] = 1.0
     return e
 
