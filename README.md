@@ -1,11 +1,6 @@
-# Code samples for "Neural Networks and Deep Learning"
+# Forked copy for Code samples for "Neural Networks and Deep Learning"
+This is where I experiment with neural networks, trying out different techniques to enhance my Machine Learning knowledge
 
-This repository contains code samples for my (forthcoming) book on
-"Neural Networks and Deep Learning".
-
-As the code is written to accompany the book, I don't intend to add
-new features.  However, bug reports are welcome, and you should feel
-free to fork and modify the code.
 
 ## License
 
