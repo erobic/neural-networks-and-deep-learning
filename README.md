@@ -1,5 +1,4 @@
-## Forked copy for Code samples for "Neural Networks and Deep Learning"
-This is where I experiment with neural networks, trying out different techniques to enhance my Machine Learning knowledge
+Experiment with neural networks
 
 
 ## License
